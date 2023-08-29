@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Sales.FrontEnd.Repositories
+namespace Sales.Frontend.Repositories
 {
     public class HttpResponseWrapper<T>
     {
@@ -24,20 +24,20 @@ namespace Sales.FrontEnd.Repositories
                 return null;
             }
 
-            var statusCode = HttpResponseMessage.StatusCode;
-            if (statusCode == HttpStatusCode.NotFound)
+            var codigoEstatus = HttpResponseMessage.StatusCode;
+            if (codigoEstatus == HttpStatusCode.NotFound)
             {
                 return "Recurso no encontrado";
             }
-            else if (statusCode == HttpStatusCode.BadRequest)
+            else if (codigoEstatus == HttpStatusCode.BadRequest)
             {
                 return await HttpResponseMessage.Content.ReadAsStringAsync();
             }
-            else if (statusCode == HttpStatusCode.Unauthorized)
+            else if (codigoEstatus == HttpStatusCode.Unauthorized)
             {
                 return "Tienes que logearte para hacer esta operación";
             }
-            else if (statusCode == HttpStatusCode.Forbidden)
+            else if (codigoEstatus == HttpStatusCode.Forbidden)
             {
                 return "No tienes permisos para hacer esta operación";
             }
@@ -46,4 +46,3 @@ namespace Sales.FrontEnd.Repositories
         }
     }
 }
-

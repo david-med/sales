@@ -1,4 +1,4 @@
-﻿namespace Sales.FrontEnd.Repositories
+﻿namespace Sales.Frontend.Repositories
 {
     public interface IRepository
     {
@@ -7,6 +7,5 @@
         Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model);
 
         Task<HttpResponseWrapper<TResponse>> PostAsync<T, TResponse>(string url, T model);
-
     }
 }
