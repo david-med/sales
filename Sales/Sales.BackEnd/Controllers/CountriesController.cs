@@ -16,6 +16,12 @@ namespace Sales.BackEnd.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            return Ok(await _context.Countries.ToListAsync());
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
@@ -46,7 +52,7 @@ namespace Sales.BackEnd.Controllers
                 return NotFound();
             }
             currentCountry.Name = country.Name;
-            _context.Update(country);
+            _context.Update(currentCountry);
             await _context.SaveChangesAsync();
             return Ok(currentCountry);
         }
