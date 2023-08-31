@@ -25,7 +25,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await repository.GetAsync<Country>($"api/countries/{Id}");
+        var response = await repository.GetAsync<Country>($"api/Countries/{Id}");
         if (response.Error)
         {
             var message = await response.GetErrorMessageAsync();
