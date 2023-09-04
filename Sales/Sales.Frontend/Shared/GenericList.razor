@@ -4,10 +4,7 @@
 {
     @if(Loading is null)
     {
-    <div class="d-flex justify-content-center align-items-center">
-            <img src="https://media0.giphy.com/media/JZLaL7vxYBMwOw4Vjd/giphy.gif" />
-    </div>
-    
+        <Loading/>
     }
     else
     {
@@ -18,7 +15,7 @@ else if (MyList.Count == 0)
 {
     @if (NoRecords is null)
     {
-        <p>No hay registros para mostrar...</p>
+        <NoRecords/>
     }
     else
     {

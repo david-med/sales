@@ -1,22 +1,18 @@
 ﻿@page "/countries"
-
-
 @inject IRepository repository;
+@inject SweetAlertService sweetAlertService;
 
 
 <h3>Países</h3>
-
+<div class="mb-3">
+    <a class="btn btn-primary" href="/countries/create">Nuevo País</a>
+</div>
 
 
 <GenericList MyList="Countries">
-    <Loading>
-        <p>loading...</p>
-    </Loading>
     <Body>
         <table class="table table-striped">
-            <div class="mb-3">
-                <a class="btn btn-primary" href="/countries/create">Nuevo País</a>
-            </div>
+            
             <thead>
                 <tr>
                     <th>País</th>
@@ -31,8 +27,8 @@
                             @country.Name
                         </td>
                         <td>
-                            <a href="/countries/edit/@country.Id" class="btn btn-warning">Editar</a>
-                            <button class="btn btn-danger" @onclick=@(() => Delete(country))>Borrar</button>
+                            <a href="/countries/edit/@country.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <button class="btn btn-sm btn-danger" @onclick=@(() => DeleteAsync(country))>Borrar</button>
 
                         </td>
 
@@ -55,6 +51,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadRecordsAsync();
+    }
+
+    private async Task LoadRecordsAsync()
+    {
         var response = await repository.GetAsync<List<Country>>("/api/countries");
         if (response.Error)
         {
@@ -62,9 +63,43 @@
             return;
         }
         Countries = response.Response;
+
     }
-    private void Delete(Country country)
+    private async Task DeleteAsync(Country country)
     {
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = $"¿Esta seguro que quieres eliminar al país {country.Name}?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+
+        if (confirm)
+        {
+            return;
+        }
+
+        var response = await repository.DeleteAsync($"api/countries/{country.Id}");
+        if (response.Error)
+        {
+            var message = await response.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        
+        await LoadRecordsAsync();
+        var toast = sweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.TopRight,
+                ShowConfirmButton = false,
+                Timer = 3000
+            });
+        await toast.FireAsync(icon: SweetAlertIcon.Success, message: "País eliminado exitosamente.");
+
         
     }
 }

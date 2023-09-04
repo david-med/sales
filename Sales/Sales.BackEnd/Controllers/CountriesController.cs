@@ -42,19 +42,13 @@ namespace Sales.BackEnd.Controllers
             return Ok(country);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
 
-        public async Task<IActionResult> PutAsync(int id, Country country)
+        public async Task<IActionResult> PutAsync(Country country)
         {
-            var currentCountry = await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
-            if (currentCountry == null)
-            {
-                return NotFound();
-            }
-            currentCountry.Name = country.Name;
-            _context.Update(currentCountry);
+            _context.Update(country);
             await _context.SaveChangesAsync();
-            return Ok(currentCountry);
+            return Ok(country);
         }
 
         [HttpDelete("{id}")]
@@ -67,7 +61,7 @@ namespace Sales.BackEnd.Controllers
                 return NotFound();
             }
             country.Name = country.Name;
-            _context.Update(country);
+            _context.Remove(country);
             await _context.SaveChangesAsync();
             return Ok(country);
         }

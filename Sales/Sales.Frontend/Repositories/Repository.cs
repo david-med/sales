@@ -33,23 +33,23 @@ namespace Sales.Frontend.Repositories
         public async Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model)
         {
             var messageJSON = JsonSerializer.Serialize(model);
-            var messageContet = new StringContent(messageJSON, Encoding.UTF8, "application/json");
-            var responseHttp = await _httpClient.PostAsync(url, messageContet);
-            return new HttpResponseWrapper<object>(null, !responseHttp.IsSuccessStatusCode, responseHttp);
+            var messageContent = new StringContent(messageJSON, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, messageContent);
+            return new HttpResponseWrapper<object>(null, !response.IsSuccessStatusCode, response);
         }
 
         public async Task<HttpResponseWrapper<TResponse>> PostAsync<T, TResponse>(string url, T model)
         {
             var messageJSON = JsonSerializer.Serialize(model);
-            var messageContet = new StringContent(messageJSON, Encoding.UTF8, "application/json");
-            var responseHttp = await _httpClient.PostAsync(url, messageContet);
-            if (responseHttp.IsSuccessStatusCode)
+            var messageContent = new StringContent(messageJSON, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, messageContent);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await UnserializeAnswer<TResponse>(responseHttp);
-                return new HttpResponseWrapper<TResponse>(response, false, responseHttp);
+                var responseU = await UnserializeAnswer<TResponse>(response);
+                return new HttpResponseWrapper<TResponse>(responseU, false, response);
             }
 
-            return new HttpResponseWrapper<TResponse>(default, !responseHttp.IsSuccessStatusCode, responseHttp);
+            return new HttpResponseWrapper<TResponse>(default, !response.IsSuccessStatusCode, response);
         }
 
         private async Task<T> UnserializeAnswer<T>(HttpResponseMessage responseHttp)
@@ -60,30 +60,30 @@ namespace Sales.Frontend.Repositories
 
         public async Task<HttpResponseWrapper<object>> DeleteAsync(string url)
         {
-            var responseHttp = await _httpClient.DeleteAsync(url);
-            return new HttpResponseWrapper<object>(null, !responseHttp.IsSuccessStatusCode, responseHttp);
+            var response = await _httpClient.DeleteAsync(url);
+            return new HttpResponseWrapper<object>(null, !response.IsSuccessStatusCode, response);
         }
 
         public async Task<HttpResponseWrapper<object>> PutAsync<T>(string url, T model)
         {
             var messageJSON = JsonSerializer.Serialize(model);
-            var messageContet = new StringContent(messageJSON, Encoding.UTF8, "application/json");
-            var responseHttp = await _httpClient.PutAsync(url, messageContet);
-            return new HttpResponseWrapper<object>(null, !responseHttp.IsSuccessStatusCode, responseHttp);
+            var messageContent = new StringContent(messageJSON, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync(url, messageContent);
+            return new HttpResponseWrapper<object>(null, !response.IsSuccessStatusCode, response);
         }
 
         public async Task<HttpResponseWrapper<TResponse>> PutAsync<T, TResponse>(string url, T model)
         {
             var messageJSON = JsonSerializer.Serialize(model);
-            var messageContet = new StringContent(messageJSON, Encoding.UTF8, "application/json");
-            var responseHttp = await _httpClient.PutAsync(url, messageContet);
-            if (responseHttp.IsSuccessStatusCode)
+            var messageContent = new StringContent(messageJSON, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync(url, messageContent);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await UnserializeAnswer<TResponse>(responseHttp);
-                return new HttpResponseWrapper<TResponse>(response, false, responseHttp);
+                var responseU = await UnserializeAnswer<TResponse>(response);
+                return new HttpResponseWrapper<TResponse>(responseU, false, response);
             }
 
-            return new HttpResponseWrapper<TResponse>(default, !responseHttp.IsSuccessStatusCode, responseHttp);
+            return new HttpResponseWrapper<TResponse>(default, !response.IsSuccessStatusCode, response);
         }
     }
 }
